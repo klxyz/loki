@@ -19,11 +19,22 @@ Separate display rendering, position/heading input, game rules, and persistent s
 
 The runtime, SDK, hosting and concrete gameplay parameters are not selected yet. One shared collectible with no automatic respawn is a proposal pending confirmation.
 
-## Meta platform decision
+## Hardware targets and platform strategy
 
 The originally supplied [test guide](https://developers.meta.com/vr/essentials/test-your-app/) targets Meta VR Glasses/Horizon OS. The [Wearables toolkit](https://developers.meta.com/wearables/device-access-toolkit/) and [Ray-Ban Display Web Apps](https://developers.meta.com/wearables/faq/) are different integration paths.
 
-Select the target glasses and phone OS before committing to a hardware adapter. Verify display, pose, location, simulation, outdoor anchoring and cross-device alignment against current official documentation. A working laptop demo must not be presented as a working glasses integration.
+Target families confirmed by the product owner on 2026-10-13: **Ray-Ban Display, VITURE and XREAL**, with **Meta VR glasses (the owner's 2027 target)** as the long-term goal. The year is a planning horizon, not a verified hardware release commitment. Exact VITURE/XREAL models, accessories and host devices remain to be selected.
+
+Keep shared multiplayer state and rules independent of each vendor SDK. Proposed delivery order: laptop simulation, a Ray-Ban Display HUD, then model-specific spatial adapters for VITURE/XREAL and eventually Meta VR. This ordering is a recommendation, not a requirement to implement every platform in the first prototype.
+
+| Target | Documented starting point | Validation still required |
+| --- | --- | --- |
+| Ray-Ban Display | [Web Apps and browser simulation](https://developers.meta.com/wearables/web-apps/) | Device input/location behavior and whether world-locked rendering is supported; HUD rendering alone does not prove it |
+| VITURE | [Glasses SDK and Unity SDK](https://www.viture.com/developer) | Exact glasses/host combination, available pose tracking, world persistence and outdoor alignment |
+| XREAL | [SDK releases](https://developer.xreal.com/download/) include model-dependent tracking and anchor features | Supported glasses/accessory/host combination, persistence, multi-user alignment and outdoor reliability |
+| Future Meta VR | [Horizon OS test paths](https://developers.meta.com/vr/essentials/test-your-app/) | Shipping hardware, final SDK capabilities, outdoor suitability and device verification |
+
+Treat display-only, orientation tracking and positional tracking as separate capabilities. Unsupported devices can use an explicitly labeled direction/distance HUD; that fallback does not meet the street-anchored 3D acceptance case. Device-local anchors also do not establish a shared city coordinate frame. Verify each adapter independently. Research checked 2026-10-13; no hardware validation has been performed.
 
 ## Delivery plan
 
@@ -31,7 +42,7 @@ Select the target glasses and phone OS before committing to a hardware adapter. 
 
 | Issue | Outcome | Dependency |
 | --- | --- | --- |
-| [LE-16](https://linear.app/le-gran-orchestra/issue/LE-16) | Validate Meta target and spatial feasibility | Hardware selection |
+| [LE-16](https://linear.app/le-gran-orchestra/issue/LE-16) | Validate Meta target and spatial feasibility | Exact device/host capability validation |
 | [LE-17](https://linear.app/le-gran-orchestra/issue/LE-17) | Persist shared pickup and inventory | LE-16 |
 | [LE-18](https://linear.app/le-gran-orchestra/issue/LE-18) | Simulate movement, collection and multiplayer casting | LE-17 |
 | [LE-19](https://linear.app/le-gran-orchestra/issue/LE-19) | Verify physical pickup at a selected Brooklyn test point | LE-18 |
